@@ -56,3 +56,20 @@ exports.exportPayments=async (req, res) => {
     res.status(500).json({ message: "Error generating CSV" })
   }
 }
+
+exports.deletePayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deleted = await Payment.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ message: "Payment not found" });
+    }
+
+    return res.json({ message: "Payment deleted successfully" });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
